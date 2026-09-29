@@ -96,7 +96,7 @@ export default function Login() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+                  <PersonIcon sx={{ color: '#F5C518' }} />
                 </InputAdornment>
               ),
             }}
@@ -116,13 +116,13 @@ export default function Login() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+                  <LockIcon sx={{ color: '#F5C518' }} />
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton size="small" onClick={() => setShowPass((s) => !s)} edge="end">
-                    {showPass ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                  <IconButton onClick={() => setShowPass((s) => !s)} edge="end" sx={{ color: '#F5C518' }}>
+                    {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>
                 </InputAdornment>
               ),
