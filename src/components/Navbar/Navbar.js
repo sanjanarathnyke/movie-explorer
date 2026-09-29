@@ -20,10 +20,10 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   const navBtnSx = (path) => ({
-    color: isActive(path) ? 'primary.main' : 'rgba(255, 255, 255, 0.7)',
+    color: isActive(path) ? '#F5C518' : 'rgba(255, 255, 255, 0.7)',
     fontWeight: isActive(path) ? 700 : 500,
     borderBottom: isActive(path) ? '2px solid' : '2px solid transparent',
-    borderColor: isActive(path) ? 'primary.main' : 'transparent',
+    borderColor: isActive(path) ? '#F5C518' : 'transparent',
     borderRadius: 0,
     px: 1.5,
     py: 2.5,
@@ -31,7 +31,7 @@ export default function Navbar() {
     letterSpacing: '0.05em',
     textTransform: 'uppercase',
     transition: 'color 0.2s, border-color 0.2s',
-    '&:hover': { color: 'primary.main', background: 'transparent' },
+    '&:hover': { color: '#F5C518', background: 'transparent' },
   });
 
   return (
@@ -46,7 +46,7 @@ export default function Navbar() {
             textDecoration: 'none', flexGrow: 1,
           }}
         >
-          <MovieIcon sx={{ color: 'primary.main', fontSize: 28 }} />
+          <MovieIcon sx={{ color: '#F5C518', fontSize: 28 }} />
           <Typography
             variant="h6"
             sx={{
@@ -80,7 +80,7 @@ export default function Navbar() {
             sx={{
               mx: 0.5,
               color: 'rgba(255, 255, 255, 0.7)',
-              '&:hover': { color: 'primary.main' },
+              '&:hover': { color: '#F5C518' },
             }}
           >
             {mode === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
