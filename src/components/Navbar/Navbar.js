@@ -1,5 +1,9 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Box, Avatar, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  AppBar, Toolbar, Typography, Button, IconButton, Box, Avatar,
+  Tooltip, Drawer, List, ListItem, ListItemButton, ListItemIcon,
+  ListItemText, Divider,
+} from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MovieIcon from '@mui/icons-material/Movie';
@@ -7,6 +11,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useThemeContext } from '../../context/ThemeContext';
@@ -16,6 +22,7 @@ export default function Navbar() {
   const { mode, toggleTheme } = useThemeContext();
   const navigate = useNavigate();
   const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -34,131 +41,209 @@ export default function Navbar() {
     '&:hover': { color: '#F5C518', background: 'transparent' },
   });
 
-  return (
-    <AppBar position="sticky">
-      <Toolbar sx={{ gap: 0.5, minHeight: { xs: 56, sm: 64 } }}>
-        {/* Logo */}
-        <Box
-          component={Link}
-          to="/"
-          sx={{
-            display: 'flex', alignItems: 'center', gap: 1,
-            textDecoration: 'none', flexGrow: 1,
-          }}
-        >
-          <MovieIcon sx={{ color: '#F5C518', fontSize: 28 }} />
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 800,
-              background: 'linear-gradient(90deg, #F5C518 0%, #FFD54F 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              letterSpacing: '-0.5px',
-              letterSpacing: '-0.5px',
-              fontSize: { xs: '1.05rem', sm: '1.2rem' },
-              display: { xs: 'none', sm: 'block' } // Optionally hide if we wanted, but let's keep it visible and just shrink it
-            }}
-          >
+  const handleDrawerClose = () => setDrawerOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    handleDrawerClose();
+  };
+
+  /* ── Mobile Drawer ──────────────────────── */
+  const mobileDrawer = (
+    <Drawer
+      anchor="right"
+      open={drawerOpen}
+      onClose={handleDrawerClose}
+      PaperProps={{
+        sx: {
+          width: 260,
+          background: '#111',
+          borderLeft: '1px solid rgba(245,197,24,0.15)',
+        },
+      }}
+    >
+      {/* Drawer header */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <MovieIcon sx={{ color: '#F5C518', fontSize: 22 }} />
+          <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#F5C518' }}>
             MovieExplorer
           </Typography>
-          {/* Shorter title for very small screens */}
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 800,
-              background: 'linear-gradient(90deg, #F5C518 0%, #FFD54F 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              letterSpacing: '-0.5px',
-              fontSize: '1.05rem',
-              display: { xs: 'block', sm: 'none' }
-            }}
-          >
-            Movies
-          </Typography>
-
         </Box>
+        <IconButton size="small" onClick={handleDrawerClose} sx={{ color: 'rgba(255,255,255,0.6)' }}>
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </Box>
 
-        {/* Nav links */}
-        {/* Nav links (Desktop) */}
-        <Button startIcon={<HomeIcon sx={{ fontSize: 16 }} />} component={Link} to="/" sx={{ ...navBtnSx('/'), display: { xs: 'none', md: 'flex' } }}>
-          Home
-        </Button>
-        <Button startIcon={<FavoriteIcon sx={{ fontSize: 16 }} />} component={Link} to="/favorites" sx={{ ...navBtnSx('/favorites'), display: { xs: 'none', md: 'flex' } }}>
-          Favorites
-        </Button>
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
 
-        {/* Nav links (Mobile) */}
-        <Tooltip title="Favorites">
-          <IconButton
+      {/* User info */}
+      {user && (
+        <Box sx={{ px: 2, py: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Avatar sx={{ width: 36, height: 36, bgcolor: '#F5C518', color: '#0a0a0a', fontWeight: 700, fontSize: '0.9rem' }}>
+            {user.username?.[0]?.toUpperCase()}
+          </Avatar>
+          <Typography sx={{ color: 'rgba(255,255,255,0.9)', fontWeight: 600, fontSize: '0.9rem' }}>
+            {user.username}
+          </Typography>
+        </Box>
+      )}
+
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+
+      {/* Nav items */}
+      <List sx={{ pt: 1 }}>
+        <ListItem disablePadding>
+          <ListItemButton
+            component={Link}
+            to="/"
+            onClick={handleDrawerClose}
+            sx={{ borderLeft: isActive('/') ? '3px solid #F5C518' : '3px solid transparent', color: isActive('/') ? '#F5C518' : 'rgba(255,255,255,0.75)' }}
+          >
+            <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}><HomeIcon fontSize="small" /></ListItemIcon>
+            <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 600, fontSize: '0.9rem' }} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
             component={Link}
             to="/favorites"
-            size="small"
-            sx={{
-              display: { xs: 'flex', md: 'none' },
-              mx: 0.5,
-              color: isActive('/favorites') ? '#F5C518' : 'rgba(255, 255, 255, 0.7)',
-            }}
+            onClick={handleDrawerClose}
+            sx={{ borderLeft: isActive('/favorites') ? '3px solid #F5C518' : '3px solid transparent', color: isActive('/favorites') ? '#F5C518' : 'rgba(255,255,255,0.75)' }}
           >
-            <FavoriteIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+            <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}><FavoriteIcon fontSize="small" /></ListItemIcon>
+            <ListItemText primary="Favorites" primaryTypographyProps={{ fontWeight: 600, fontSize: '0.9rem' }} />
+          </ListItemButton>
+        </ListItem>
 
-        {/* Theme toggle */}
-        <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'}>
-          <IconButton
-            onClick={toggleTheme}
-            aria-label="toggle theme"
-            size="small"
-            sx={{
-              mx: 0.5,
-              color: 'rgba(255, 255, 255, 0.7)',
-              '&:hover': { color: '#F5C518' },
-            }}
-          >
-            {mode === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
-          </IconButton>
-        </Tooltip>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => { toggleTheme(); handleDrawerClose(); }} sx={{ color: 'rgba(255,255,255,0.75)' }}>
+            <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}>
+              {mode === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
+            </ListItemIcon>
+            <ListItemText primary={mode === 'dark' ? 'Light Mode' : 'Dark Mode'} primaryTypographyProps={{ fontWeight: 600, fontSize: '0.9rem' }} />
+          </ListItemButton>
+        </ListItem>
+      </List>
 
-        {/* Auth */}
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', mt: 'auto' }} />
+
+      {/* Logout / Login */}
+      <Box sx={{ p: 2 }}>
         {user ? (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
-            <Avatar
-              sx={{
-                width: 32, height: 32,
-                bgcolor: 'primary.main', color: 'primary.contrastText',
-                fontSize: '0.8rem', fontWeight: 700,
-              }}
-            >
-              {user.username?.[0]?.toUpperCase()}
-            </Avatar>
-            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.82rem' }}>
-              {user.username}
-            </Typography>
-            <Tooltip title="Logout">
-              <IconButton
-                size="small"
-                onClick={() => { logout(); navigate('/login'); }}
-                sx={{ color: 'rgba(255, 255, 255, 0.7)', '&:hover': { color: 'error.main' } }}
-              >
-                <LogoutIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Box>
+          <Button
+            fullWidth
+            variant="outlined"
+            startIcon={<LogoutIcon />}
+            onClick={handleLogout}
+            sx={{ color: 'rgba(255,255,255,0.7)', borderColor: 'rgba(255,255,255,0.2)', '&:hover': { borderColor: 'error.main', color: 'error.main' } }}
+          >
+            Logout
+          </Button>
         ) : (
           <Button
-            startIcon={<LoginIcon />}
+            fullWidth
             variant="contained"
-            size="small"
+            startIcon={<LoginIcon />}
             component={Link}
             to="/login"
-            sx={{ ml: 1 }}
+            onClick={handleDrawerClose}
+            sx={{ background: '#F5C518', color: '#0a0a0a', '&:hover': { background: '#e6b800' } }}
           >
             Login
           </Button>
         )}
-      </Toolbar>
-    </AppBar>
+      </Box>
+    </Drawer>
+  );
+
+  return (
+    <>
+      <AppBar position="sticky" sx={{ overflow: 'hidden' }}>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 }, px: { xs: 1.5, sm: 2 } }}>
+
+          {/* Logo */}
+          <Box
+            component={Link}
+            to="/"
+            sx={{ display: 'flex', alignItems: 'center', gap: 0.75, textDecoration: 'none', flexGrow: 1, minWidth: 0 }}
+          >
+            <MovieIcon sx={{ color: '#F5C518', fontSize: { xs: 22, sm: 28 }, flexShrink: 0 }} />
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                fontWeight: 800,
+                background: 'linear-gradient(90deg, #F5C518 0%, #FFD54F 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                letterSpacing: '-0.5px',
+                fontSize: { xs: '1rem', sm: '1.2rem' },
+              }}
+            >
+              MovieExplorer
+            </Typography>
+          </Box>
+
+          {/* ── Desktop Nav (md+) ── */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 0.5 }}>
+            <Button startIcon={<HomeIcon sx={{ fontSize: 16 }} />} component={Link} to="/" sx={navBtnSx('/')}>
+              Home
+            </Button>
+            <Button startIcon={<FavoriteIcon sx={{ fontSize: 16 }} />} component={Link} to="/favorites" sx={navBtnSx('/favorites')}>
+              Favorites
+            </Button>
+
+            <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'}>
+              <IconButton onClick={toggleTheme} size="small" sx={{ mx: 0.5, color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#F5C518' } }}>
+                {mode === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
+              </IconButton>
+            </Tooltip>
+
+            {user ? (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 1 }}>
+                <Avatar sx={{ width: 32, height: 32, bgcolor: '#F5C518', color: '#0a0a0a', fontSize: '0.8rem', fontWeight: 700 }}>
+                  {user.username?.[0]?.toUpperCase()}
+                </Avatar>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.82rem' }}>
+                  {user.username}
+                </Typography>
+                <Tooltip title="Logout">
+                  <IconButton size="small" onClick={() => { logout(); navigate('/login'); }} sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: 'error.main' } }}>
+                    <LogoutIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Button startIcon={<LoginIcon />} variant="contained" size="small" component={Link} to="/login" sx={{ ml: 1 }}>
+                Login
+              </Button>
+            )}
+          </Box>
+
+          {/* ── Mobile Nav (xs–sm): just hamburger menu ── */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+            {user && (
+              <Avatar sx={{ width: 30, height: 30, bgcolor: '#F5C518', color: '#0a0a0a', fontSize: '0.75rem', fontWeight: 700, mr: 0.5 }}>
+                {user.username?.[0]?.toUpperCase()}
+              </Avatar>
+            )}
+            <IconButton
+              size="small"
+              onClick={() => setDrawerOpen(true)}
+              sx={{ color: 'rgba(255,255,255,0.85)', '&:hover': { color: '#F5C518' } }}
+              aria-label="open menu"
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+
+        </Toolbar>
+      </AppBar>
+
+      {mobileDrawer}
+    </>
   );
 }
