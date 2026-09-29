@@ -6,7 +6,7 @@ A responsive movie discovery web application built with React.
 
 ## Features
 
-- Log in with username and password (frontend-only)
+- Log in with username and password
 - Search movies using the TMDb API
 - View trending movies
 - View detailed movie information (poster, title, release date, rating, overview, genres, runtime, cast, trailer)
