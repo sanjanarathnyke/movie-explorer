@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const login = (username, password) => {
-    if (username && password) {
+    if (username === 'admin' && password === 'password123') {
       const u = { username };
       setUser(u);
       localStorage.setItem('movieExplorerUser', JSON.stringify(u));

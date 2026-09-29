@@ -19,24 +19,10 @@ export default function Login() {
   const navigate                    = useNavigate();
   const { login }                   = useAuth();
 
-  const validatePassword = (pass) => {
-    if (pass.length < 8) return 'Password must be at least 8 characters long.';
-    if (!/[A-Z]/.test(pass)) return 'Password must contain at least one uppercase letter.';
-    if (!/[0-9]/.test(pass)) return 'Password must contain at least one number.';
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pass)) return 'Password must contain at least one symbol.';
-    return null;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     if (!username || !password) { setError('Both fields are required.'); return; }
-    
-    const passError = validatePassword(password);
-    if (passError) {
-      setError(passError);
-      return;
-    }
 
     if (login(username, password)) { navigate('/'); }
     else { setError('Invalid username or password.'); }
@@ -111,7 +97,7 @@ export default function Login() {
             required
             autoComplete="current-password"
             InputLabelProps={{ shrink: false }}
-            helperText="Must be 8+ chars with 1 uppercase, 1 number, and 1 symbol."
+            helperText="Use Username: admin | Password: password123"
             FormHelperTextProps={{ sx: { ml: 0, mt: 1, opacity: 0.8 } }}
             InputProps={{
               startAdornment: (
