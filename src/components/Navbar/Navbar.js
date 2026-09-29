@@ -55,21 +55,55 @@ export default function Navbar() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               letterSpacing: '-0.5px',
-              fontSize: '1.2rem',
+              letterSpacing: '-0.5px',
+              fontSize: { xs: '1.05rem', sm: '1.2rem' },
+              display: { xs: 'none', sm: 'block' } // Optionally hide if we wanted, but let's keep it visible and just shrink it
             }}
           >
             MovieExplorer
+          </Typography>
+          {/* Shorter title for very small screens */}
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 800,
+              background: 'linear-gradient(90deg, #F5C518 0%, #FFD54F 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              letterSpacing: '-0.5px',
+              fontSize: '1.05rem',
+              display: { xs: 'block', sm: 'none' }
+            }}
+          >
+            Movies
           </Typography>
 
         </Box>
 
         {/* Nav links */}
-        <Button startIcon={<HomeIcon sx={{ fontSize: 16 }} />} component={Link} to="/" sx={navBtnSx('/')}>
+        {/* Nav links (Desktop) */}
+        <Button startIcon={<HomeIcon sx={{ fontSize: 16 }} />} component={Link} to="/" sx={{ ...navBtnSx('/'), display: { xs: 'none', md: 'flex' } }}>
           Home
         </Button>
-        <Button startIcon={<FavoriteIcon sx={{ fontSize: 16 }} />} component={Link} to="/favorites" sx={navBtnSx('/favorites')}>
+        <Button startIcon={<FavoriteIcon sx={{ fontSize: 16 }} />} component={Link} to="/favorites" sx={{ ...navBtnSx('/favorites'), display: { xs: 'none', md: 'flex' } }}>
           Favorites
         </Button>
+
+        {/* Nav links (Mobile) */}
+        <Tooltip title="Favorites">
+          <IconButton
+            component={Link}
+            to="/favorites"
+            size="small"
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              mx: 0.5,
+              color: isActive('/favorites') ? '#F5C518' : 'rgba(255, 255, 255, 0.7)',
+            }}
+          >
+            <FavoriteIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
 
         {/* Theme toggle */}
         <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'}>
@@ -99,7 +133,7 @@ export default function Navbar() {
             >
               {user.username?.[0]?.toUpperCase()}
             </Avatar>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.82rem' }}>
+            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' }, color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.82rem' }}>
               {user.username}
             </Typography>
             <Tooltip title="Logout">
