@@ -56,25 +56,27 @@ export default function Navbar() {
       open={drawerOpen}
       onClose={handleDrawerClose}
       PaperProps={{
-        sx: {
+        style: {
           width: 260,
-          background: '#111 !important',
-          backgroundColor: '#111 !important',
-          backgroundImage: 'none !important',
+          background: '#111',
+          backgroundColor: '#111',
+          backgroundImage: 'none',
           borderLeft: '1px solid rgba(245,197,24,0.15)',
           color: '#fff',
         },
       }}
     >
+      {/* All content wrapped in dark container — ensures no theme leakage */}
+      <div style={{ background: '#111', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Drawer header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <MovieIcon sx={{ color: '#F5C518', fontSize: 22 }} />
-          <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#F5C518 !important' }}>
+          <Typography style={{ fontWeight: 800, fontSize: '1rem', color: '#F5C518' }}>
             MovieExplorer
           </Typography>
         </Box>
-        <IconButton size="small" onClick={handleDrawerClose} sx={{ color: 'rgba(255,255,255,0.7) !important' }}>
+        <IconButton size="small" onClick={handleDrawerClose} style={{ color: 'rgba(255,255,255,0.7)' }}>
           <CloseIcon fontSize="small" />
         </IconButton>
       </Box>
@@ -87,7 +89,7 @@ export default function Navbar() {
           <Avatar sx={{ width: 36, height: 36, bgcolor: '#F5C518', color: '#0a0a0a', fontWeight: 700, fontSize: '0.9rem' }}>
             {user.username?.[0]?.toUpperCase()}
           </Avatar>
-          <Typography sx={{ color: '#fff !important', fontWeight: 600, fontSize: '0.9rem' }}>
+          <Typography style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>
             {user.username}
           </Typography>
         </Box>
@@ -102,11 +104,11 @@ export default function Navbar() {
             component={Link}
             to="/"
             onClick={handleDrawerClose}
-            sx={{
+            style={{
               borderLeft: isActive('/') ? '3px solid #F5C518' : '3px solid transparent',
-              color: `${isActive('/') ? '#F5C518' : 'rgba(255,255,255,0.85)'} !important`,
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' },
+              color: isActive('/') ? '#F5C518' : 'rgba(255,255,255,0.85)',
             }}
+            sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' } }}
           >
             <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}><HomeIcon fontSize="small" /></ListItemIcon>
             <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 600, fontSize: '0.9rem', color: 'inherit' }} />
@@ -118,11 +120,11 @@ export default function Navbar() {
             component={Link}
             to="/favorites"
             onClick={handleDrawerClose}
-            sx={{
+            style={{
               borderLeft: isActive('/favorites') ? '3px solid #F5C518' : '3px solid transparent',
-              color: `${isActive('/favorites') ? '#F5C518' : 'rgba(255,255,255,0.85)'} !important`,
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' },
+              color: isActive('/favorites') ? '#F5C518' : 'rgba(255,255,255,0.85)',
             }}
+            sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' } }}
           >
             <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}><FavoriteIcon fontSize="small" /></ListItemIcon>
             <ListItemText primary="Favorites" primaryTypographyProps={{ fontWeight: 600, fontSize: '0.9rem', color: 'inherit' }} />
@@ -132,10 +134,8 @@ export default function Navbar() {
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => { toggleTheme(); handleDrawerClose(); }}
-            sx={{
-              color: 'rgba(255,255,255,0.85) !important',
-              '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' },
-            }}
+            style={{ color: 'rgba(255,255,255,0.85)' }}
+            sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.06)' } }}
           >
             <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}>
               {mode === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
@@ -158,11 +158,7 @@ export default function Navbar() {
             variant="outlined"
             startIcon={<LogoutIcon />}
             onClick={handleLogout}
-            sx={{
-              color: 'rgba(255,255,255,0.85) !important',
-              borderColor: 'rgba(255,255,255,0.3) !important',
-              '&:hover': { borderColor: '#f44336 !important', color: '#f44336 !important', bgcolor: 'rgba(244,67,54,0.08)' },
-            }}
+            style={{ color: 'rgba(255,255,255,0.85)', borderColor: 'rgba(255,255,255,0.3)' }}
           >
             Logout
           </Button>
@@ -180,6 +176,7 @@ export default function Navbar() {
           </Button>
         )}
       </Box>
+      </div>
     </Drawer>
   );
 
