@@ -34,7 +34,6 @@ Create a `.env` file with your TMDb credentials:
 
 ```
 REACT_APP_TMDB_API_KEY=your_api_key
-REACT_APP_TMDB_ACCESS_TOKEN=your_access_token
 ```
 
 ## Scripts
