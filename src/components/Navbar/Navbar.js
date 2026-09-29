@@ -20,7 +20,7 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   const navBtnSx = (path) => ({
-    color: isActive(path) ? 'primary.main' : 'text.secondary',
+    color: isActive(path) ? 'primary.main' : 'rgba(255, 255, 255, 0.7)',
     fontWeight: isActive(path) ? 700 : 500,
     borderBottom: isActive(path) ? '2px solid' : '2px solid transparent',
     borderColor: isActive(path) ? 'primary.main' : 'transparent',
@@ -79,7 +79,7 @@ export default function Navbar() {
             size="small"
             sx={{
               mx: 0.5,
-              color: 'text.secondary',
+              color: 'rgba(255, 255, 255, 0.7)',
               '&:hover': { color: 'primary.main' },
             }}
           >
@@ -99,14 +99,14 @@ export default function Navbar() {
             >
               {user.username?.[0]?.toUpperCase()}
             </Avatar>
-            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.82rem' }}>
               {user.username}
             </Typography>
             <Tooltip title="Logout">
               <IconButton
                 size="small"
                 onClick={() => { logout(); navigate('/login'); }}
-                sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}
+                sx={{ color: 'rgba(255, 255, 255, 0.7)', '&:hover': { color: 'error.main' } }}
               >
                 <LogoutIcon fontSize="small" />
               </IconButton>
