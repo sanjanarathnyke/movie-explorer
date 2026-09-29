@@ -97,8 +97,6 @@ export default function Login() {
             required
             autoComplete="current-password"
             InputLabelProps={{ shrink: false }}
-            helperText="Use Username: admin | Password: password123"
-            FormHelperTextProps={{ sx: { ml: 0, mt: 1, opacity: 0.8 } }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
